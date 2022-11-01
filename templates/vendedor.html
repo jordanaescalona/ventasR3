@@ -1,0 +1,56 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+   <!-- Dropdown Card Example -->
+   <div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h4 class="m-0 font-weight-bold text-primary">{{title}}</h4>
+        </div>
+        <!-- Card Body -->
+        <div class="container my-5">
+            <form class="container" action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.media}}
+                <div class="form-group">
+                    {{form.as_p}}
+                </div>
+                
+                <button type="submit" class="btn btn-primary">{{boton}}</button>
+            </form>
+        </div>
+    </div>
+   
+
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            language: {
+                "decimal": ",",
+                "thousands": ".",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast":"Último",
+                    "sNext":"Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "sProcessing":"Cargando..."
+            }
+        });
+        
+    });
+    
+</script>
+{% endblock javascript %}

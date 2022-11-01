@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Administración</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'img/LOGOico.ico' %}" />
+    {% block head %}
+        
+    {% endblock head %}
+        
+  
+    <!-- Custom fonts for this template -->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="{% static 'vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+    <!-- jquery-confirm -->
+    <link href="{% static 'vendor/jquery-confirm/jquery-confirm.min.css' %}" rel="stylesheet">
+
+    <!-- select2 -->
+    <link rel="stylesheet" href="{% static 'select2/select.min.css' %}">
+
+    
+</head>
+
+<body id="page-top" class="sidebar-toggled">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar: Agrergamos "toggled" para que aparezca el menu minimizado -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark " id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'ventas:listado' %}">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                
+                
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            {% include 'base/menu_lateral.html' %}
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-light bg-white topbar my-4 static-top shadow">
+
+                    
+
+                    <!-- Topbar Search -->
+                    <div class="mx-auto">
+                        <h3>ALQUILER Y VENTA</h3>
+                    </div>
+                    
+
+                </nav>
+                <!-- End of Topbar -->
+                
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Heading -->
+                    <h1 class="h3 mb-4 text-gray-800">
+                        
+                        {% block h1 %}
+                            
+                        {% endblock h1 %}
+                            
+                    </h1>
+                    
+                    {% block content %}
+                        
+                    {% endblock content %}
+                        
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+           
+            {% include 'base/footer.html' %}
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+    <!-- DataTables-->
+    
+    <script src="{% static 'vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    
+    <!--Jequery-confirm-->
+    <script src="{% static 'vendor/jquery-confirm/jquery-confirm.min.js' %}"></script>
+
+    <!-- select2 -->
+    <script src="{% static 'select2/select.min.js' %}"></script>
+    
+    <script>
+        $(document).ready(function () {
+
+            var $enlaces = $(".nav-item>.collapse>.collapse-item");
+
+            $($enlaces).each(function(){
+                var div_show = $(this).closest('.collapse');
+                var div_nav = div_show.closest('.nav-item');
+
+                var request_path = '{‌{request.path}}'
+                var link = $(this).attr('href');
+  
+                if (request_path.includes(link)){
+                    $(this).addClass('active');
+                    div_show.addClass("show");
+                    div_nav.addClass("active");
+                }
+            });
+        })
+            
+        function mensaje(msg,color='green'){
+            $.alert({
+                title: '',
+                theme: 'material',
+                type: color,
+                content: msg,
+            });
+        }
+
+        {% if messages %}
+            {% for message in messages %}
+                mensaje("{{message}}");
+                console.log(mensaje);
+            {% endfor %}
+        {% endif %}
+
+        {% if form.errors %}
+                                            
+            {% for field in form %}
+                                                
+                {% if field.errors %}
+                                                    
+                    {% for error in field.errors  %}
+                        mensaje('{{ error|escape }}','green')
+                    {% endfor %}
+                                                        
+                {% endif %}
+                                                    
+            {% endfor %}
+                                            
+            {% if form.non_field_errors %}
+                                                
+                {% for error in form.non_field_errors %}
+                    mensaje('{{ error|escape }}','red')
+                {% endfor %}
+                                                    
+            {% endif %}
+                                                
+                                                
+        {% endif %}
+   
+</script>
+
+    </script>
+    {% block javascript %}{% endblock javascript %}
+</body>
+
+</html>

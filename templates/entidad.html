@@ -1,0 +1,121 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+   <!-- Dropdown Card Example -->
+   <div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h4 class="m-0 font-weight-bold text-primary">Nuevo Registro</h4>
+        </div>
+        <!-- Card Body -->
+        <div class="container my-5">
+            <form class="container" action="" method="post" enctype="multipart/form-data" id="myform">
+                {% csrf_token %}
+                {{form.media}}
+
+                <div class="form-row">
+                    <div class="col-md-8">
+                      {{form.vendedor}}
+                    </div>
+                    <div class="col-md-4">
+                        <a class="btn btn-success" href="{% url 'ventas:nuevo_vendedor_entidad' %}" onclick="vendedor()">Agregar nuevo vendedor</a>
+                    </div>
+                </div><br>
+                <div class="form-group">
+                    <label for="estado">{{form.estado.label}}</label>
+                    {{form.estado}}
+                </div>
+                <div class="form-group">
+                    <label for="localidad">{{form.localidad.label}}</label>
+                    {{form.localidad}}
+                </div>  
+                <div class="form-group">
+                    <label for="tipo">{{form.tipo.label}}</label>
+                    {{form.tipo}}
+                </div>
+                <div class="form-group">
+                    <label for="precio">{{form.moneda.label}}</label>
+                    {{form.moneda}}
+                </div>
+                <div class="form-group">
+                    <label for="precio">{{form.precio.label}}</label>
+                    {{form.precio}}
+                </div>
+                <div class="form-group">
+                    <label for="ubicacion">{{form.ubicacion.label}}</label>
+                    {{form.ubicacion}}
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">{{form.descripcion.label}}</label>
+                    <br>
+                    {{form.descripcion}}
+                </div>
+                <div class="form-group">
+                    <label for="imagen">{{form.imagen.label}}</label>
+                    {{form.imagen}}
+                </div>
+                <hr>
+                <button type="submit" class="btn btn-primary btn-lg">Guardad PDF</button>
+            </form>
+        </div>
+    </div>
+   
+
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            language: {
+                "decimal": ",",
+                "thousands": ".",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast":"Último",
+                    "sNext":"Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "sProcessing":"Cargando..."
+            }
+        });
+        
+        $('#vendedor').select2({
+                placeholder: 'Agregar vendedor ---',
+                allowClear:true
+            });
+           
+        
+    });
+    function abrir_modal(url){
+            var $ = jQuery.noConflict();
+            $("#popup").load(url, function(){
+                $(this).modal({
+                    backdrop:'static',
+                    keyboard: false
+                })
+                $(this).modal('show');
+            });
+            return false;
+        }
+
+        function cerrar_modal(){
+
+            $('#popup').modal('hide');
+            return false;
+        }
+
+        
+
+
+</script>
+{% endblock javascript %}

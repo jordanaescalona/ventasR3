@@ -1,0 +1,40 @@
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+      
+      
+        <div class="modal-body">
+          ¿Eliminar registro: 
+          
+          {% if entidad.tipo == 'CASA1' %}
+                Casa en Venta
+            {% elif entidad.tipo == 'CASA2' %}
+                Casa en Alquiler  
+            {% elif entidad.tipo == 'TERRENO1' %}
+                Terreno en Venta
+            {% elif entidad.tipo == 'TERRENO2' %}
+                Terreno en Alquiler
+            {% elif entidad.tipo == 'CAMPO_GANADERO1' %}
+                Campo Ganadero en Venta
+            {% elif entidad.tipo == 'CAMPO_GANADERO2' %}
+                Campo Ganadero en Alquiler
+            {% elif entidad.tipo == 'CAMPO_MIXTO1' %}
+                Campo Mixto en Venta
+            {% elif entidad.tipo == 'CAMPO_MIXTO2' %}
+                Campo Mixto en Alquiler
+            {% elif entidad.tipo == 'CAMPO_AGRICOLA1' %}
+                Campo Agrícola en Venta
+            {% elif entidad.tipo == 'CAMPO_AGRICOLA2' %}
+                Campo Agrícola en Alquiler
+            {% elif entidad.tipo == 'MAQUINARIA1' %}
+                Maquinaria en Venta
+            {% elif entidad.tipo == 'MAQUINARIA2' %}
+                Maquinaria en Alquiler
+            {% endif %}
+            - {{entidad.localidad}}
+          ?
+        </div>
+        
+     
+    </div>
+  </div>
+

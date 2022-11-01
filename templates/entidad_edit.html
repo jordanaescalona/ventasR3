@@ -1,0 +1,134 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+   <!-- Dropdown Card Example -->
+   <div class="card shadow">
+    <!-- Card Header - Dropdown -->
+        <div
+            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+            <h4 class="m-0 font-weight-bold text-primary">EDITAR REGISTRO</h4>
+        </div>
+        <!-- Card Body -->
+        <div class="container my-5">
+            <form class="container" action="" method="post" enctype="multipart/form-data" id="formulario">
+                {% csrf_token %}
+                {{form.media}}
+                {{form.as_p}}
+
+                
+                <br>   
+                
+            </form>
+        </div>
+    </div>
+   
+    
+    {% if lista_imagenes %}
+      
+        <h6 class="mt-5">Imágenes cargadas:</h6>
+        
+        
+            <div class="row">
+                {% for img in lista_imagenes %}
+                <div class="col-sm-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <img class="card-img-top" src="../../../media/{{ img}}" alt="{{img}}">
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-danger" onclick="eliminar('{{img.pk}}')">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        
+                
+    {% endif %}
+
+    <button type="submit" class="my-5 btn btn-primary btn-lg" form="formulario">Guardar cambios</button>
+{% endblock content %}
+
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            language: {
+                "decimal": ",",
+                "thousands": ".",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast":"Último",
+                    "sNext":"Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "sProcessing":"Cargando..."
+            }
+        });
+        
+        $('#vendedor').select2({
+                placeholder: 'Agregar vendedor ---',
+                allowClear:true
+            });
+           
+        
+    }); /* cierre funcion ready */
+    
+    
+    function eliminar(pk)
+    {
+        // mensaje(id);
+        $.confirm({
+            theme:"modern",
+            type:'red',
+            title: "Confirmación Requerida",
+            content: 'url:/entidad/delete/imagen/' + pk,
+            onContentReady: function () {
+                var self = this;
+                
+            },
+            buttons:{
+                borrar:{
+                    text:"Eliminar",
+                    btnClass:"btn btn-danger",
+                    action: function(){
+                        
+                        var data = {"pk":pk};
+	                    console.log(data);
+
+                        var token = '{{csrf_token}}';
+                        $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            type:"POST",
+                            data:data,
+                            url: '/entidad/delete/imagen/' + pk,
+                            success: function(r){
+                                console.log(r);
+                                if(r==="ok"){
+                                    location.reload(true);
+                                }else{
+                                    mensaje(r,'red');
+                                }
+                            },
+                            error: function(a,b,c){
+                                mensaje(c);
+                            }
+                        });
+                    }
+                    },
+                cancelar: function(){}
+                }
+        });
+    }
+                  
+</script>
+{% endblock javascript %}

@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+    
+    <style type="text/css"> 
+    
+        @page{
+            size:a4 portrait;
+            margin: 2cm;
+            
+        }
+        
+        *{
+            font-family: Arial;
+            font-size:15px;
+
+        }
+       
+        h1{
+            font-size: 40px;
+        }
+        h2{
+            font-size: 30px;
+            color:lightseagreen;
+        }
+        p{
+            font-size: 20px;
+        }
+        a{
+            font-size:30px;
+        }
+        
+        .center{
+            text-align: center;
+        }
+        .derecha{
+            text-align:right ;
+            margin-top: 50px;
+            padding: 0px;
+        }
+        
+        .imagen{
+            height: 150px;
+        }
+        .ubicacion{
+            margin-left: 0%;
+            padding-left: 0%;
+            
+        } 
+             
+    </style>
+        
+    </head>
+    <body>
+        
+        <img src="../static/img/portada.png" alt="">
+        
+        <br><br>
+        <h1 class="center">
+            {% if entidad.tipo == 'CASA1' %}
+                Casa en Venta
+            {% elif entidad.tipo == 'CASA2' %}
+                Casa en Alquiler  
+            {% elif entidad.tipo == 'TERRENO1' %}
+                Terreno en Venta
+            {% elif entidad.tipo == 'TERRENO2' %}
+                Terreno en Alquiler
+            {% elif entidad.tipo == 'CAMPO_GANADERO1' %}
+                Campo Ganadero en Venta
+            {% elif entidad.tipo == 'CAMPO_GANADERO2' %}
+                Campo Ganadero en Alquiler
+            {% elif entidad.tipo == 'CAMPO_MIXTO1' %}
+                Campo Mixto en Venta
+            {% elif entidad.tipo == 'CAMPO_MIXTO2' %}
+                Campo Mixto en Alquiler
+            {% elif entidad.tipo == 'CAMPO_AGRICOLA1' %}
+                Campo Agrícola en Venta
+            {% elif entidad.tipo == 'CAMPO_AGRICOLA2' %}
+                Campo Agrícola en Alquiler
+            {% elif entidad.tipo == 'MAQUINARIA1' %}
+                Maquinaria en Venta
+            {% elif entidad.tipo == 'MAQUINARIA2' %}
+                Maquinaria en Alquiler
+            {% endif %}
+            <br>
+            {{entidad.localidad}}
+        </h1>
+        
+        <br><br><br><br><br><br><br><br><br>
+        <div class="derecha">
+            <p style="color:rgb(5, 124, 118);">SILVIA SCHIAVERANO</p>
+            <p>3571 534006</p>
+        </div>
+        
+        
+        {% if entidad.descripcion %}          
+            <h2>DESCRIPCIÓN GENERAL</h2>
+            <div class="contenedor">
+                {{entidad.descripcion|safe}}
+            </div>
+        {% endif %}
+        
+        {% if entidad.ubicacion %}
+
+        <div class="ubicacion" style="page-break-before: before;">
+            <img src="../static/img/icono_google_maps_png.png" alt="">
+            <a href="{{entidad.ubicacion}}" target="_blank">Ver ubicación</a>
+            <p>{{entidad.ubicacion}}</p>         
+        </div>
+        
+        {% endif %}
+        <br><br>   
+        {% if entidad.imagen %}
+            
+            {% for i in entidad.imagen.all %}
+             
+              
+            <div style="margin-bottom: 10px;">
+                
+                <img src="media/{{i}}" alt="" height="400px">
+            </div>
+            {% endfor %}
+        {% endif %}
+            
+    </body>
+    </html>

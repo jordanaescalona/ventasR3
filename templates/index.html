@@ -1,0 +1,238 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+   <!-- Dropdown Card Example -->
+   <div class="card shadow mb-4">
+    <!-- Card Header - Dropdown -->
+    <div
+        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h4 class="m-0 font-weight-bold text-primary">{{title}}</h4>
+        <div class="dropdown no-arrow">
+            <a href="{% url 'ventas:nueva_entidad' %}" class="btn btn-primary">Nuevo</a>
+            
+        </div>
+    </div>
+    <!-- Card Body -->
+    
+    <div class="card-body">
+
+    
+        <div class="table-responsive"> 
+            <table class="table table-striped table-hover table-borderer" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <th >Id</th>
+                    <th >Localidad</th>
+                    <th >Tipo</th>
+                    <th >Moneda</th>
+                    <th >Precio</th>
+                    <th >Comisionista</th>
+                    
+                    <th>Estado</th>
+
+                    <th class="all">Acciones</th>
+                </thead>
+                <tbody>
+                    
+                    {% for item in object_list  %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.localidad|title }}</td>
+
+                            
+                            {% if item.tipo == 'CASA1' %}
+                                <td>Casa en Venta</td>
+                            {% elif item.tipo == 'CASA2' %}
+                                <td>Casa en Alquiler</td>  
+                            {% elif item.tipo == 'TERRENO1' %}
+                                <td>Terreno en Venta</td>
+                            {% elif item.tipo == 'TERRENO2' %}
+                                <td>Terreno en Alquiler</td>
+                            {% elif item.tipo == 'CAMPO_GANADERO1' %}
+                                <td>Campo Ganadero en Venta</td>
+                            {% elif item.tipo == 'CAMPO_GANADERO2' %}
+                                <td>Campo Ganadero en Alquiler</td>
+                            {% elif item.tipo == 'CAMPO_MIXTO1' %}
+                                <td>Campo Mixto en Venta</td>
+                            {% elif item.tipo == 'CAMPO_MIXTO2' %}
+                                <td>Campo Mixto en Alquiler</td>
+                            {% elif item.tipo == 'CAMPO_AGRICOLA1' %}
+                                <td>Campo Agrícola en Venta</td>
+                            {% elif item.tipo == 'CAMPO_AGRICOLA2' %}
+                                <td>Campo Agrícola en Alquiler</td>
+                            {% elif item.tipo == 'MAQUINARIA1' %}
+                                <td>Maquinaria en Venta</td>
+                            {% elif item.tipo == 'MAQUINARIA2' %}
+                                <td>Maquinaria en Alquiler</td>
+                            {% endif %}
+                            <td >{{ item.moneda}}</td>
+                            <td >{{ item.precio}}</td>
+                            <td >{{ item.vendedor|title}}</td>
+                            
+                            <td >{{ item.estado}}</td>
+                            
+                            <td style="width:11% !important;">
+                                <div class="row">
+                                    <div class="col" style="align-items:left;">
+                                        <a href="{% url 'ventas:modificar_entidad' item.pk %}" class="btn btn-warning btn-circle" role="button" title="Editar"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        <button type="button"  onclick="eliminar('{{item.pk}}')" class="btn btn-danger btn-circle m-1" role="button" title="Eliminar"> 
+                                            <i class="far fa-trash-alt"></i> 
+                                        </button>
+                                        <br>
+                                        <a  href="{% url 'ventas:pdf' item.pk %}" target="_blank" class="btn btn-info btn-circle" role="button" title="Pdf">
+                                            <i class="far fa-file-pdf"></i>
+                                        </a>
+                                        <button type="button"  onclick="estado('{{item.pk}}')" title="Cambiar estado" class="btn btn-success btn-circle m-1" role="button">
+                                            E
+                                        </button>
+                                    </div>                      
+                                </div>
+                            </td>
+                        </tr>
+                        
+                    {% endfor %}
+                        
+                </tbody>
+            </table>
+        </div>
+    
+    </div>
+</div>
+
+<div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable({
+            language: {
+                "decimal": ",",
+                "thousands": ".",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "No se encontraron resultados",
+                "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sSearch": "Buscar:",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast":"Último",
+                    "sNext":"Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "sProcessing":"Cargando..."
+            }
+        });
+        
+    });
+    function abrir_modal(url){
+            var $ = jQuery.noConflict();
+            $("#popup").load(url, function(){
+                $(this).modal({
+                    backdrop:'static',
+                    keyboard: false
+                })
+                $(this).modal('show');
+            });
+            return false;
+        }
+
+        function cerrar_modal(){
+
+            $('#popup').modal('hide');
+            return false;
+        }
+        function estado(pk){
+            $.confirm({
+                theme:"modern",
+                type:'green',
+                title: "Cambiar estado",
+                content: 'url:/entidad/editar_estado/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Modificar",
+                        btnClass:"btn btn-success",
+                        action: function(){
+                            
+                            
+                            var estado = this.$content.find('#id_estado')
+                            
+                            var data = {"pk":pk,"estado":estado.val()};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/entidad/editar_estado/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+        function eliminar(pk){  
+            $.confirm({
+                theme:"modern",
+                type:'red',
+                title: "Eliminar registro",
+                content: 'url:/entidad/delete/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Eliminar",
+                        btnClass:"btn btn-danger",
+                        action: function(){
+                                                        
+                            var data = {"pk":pk};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/entidad/delete/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+</script>
+{% endblock javascript %}
