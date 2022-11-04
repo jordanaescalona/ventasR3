@@ -31,7 +31,7 @@ class EntidadForm(forms.ModelForm):
             })
         
         #agregamos valor por default
-        self.fields['vendedor'].empty_label = "---Seleccione Vendedor---"
+        self.fields['vendedor'].empty_label = "---Seleccione Comisionista---"
         
         self.fields['descripcion'].label = "Descripción detallada:"
         self.fields['precio'].label = "Precio:"
